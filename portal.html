@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal Escolar JFS · Grupo Escolar José Francisco Santana</title>
+<meta name="description" content="Notas, frequência, boletins e avisos do Grupo Escolar José Francisco Santana.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Grupo Escolar José Francisco Santana">
+<meta property="og:title" content="Portal Escolar JFS">
+<meta property="og:description" content="Notas, frequência, boletins e avisos do Grupo Escolar José Francisco Santana.">
+<meta property="og:url" content="https://grupoescolarjfs.github.io/portal">
+<meta property="og:image" content="https://grupoescolarjfs.github.io/og-portal.jpg">
+<meta property="og:image:secure_url" content="https://grupoescolarjfs.github.io/og-portal.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Brasão do Grupo Escolar José Francisco Santana e o nome Portal Escolar JFS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#062653">
+<link rel="icon" href="icone.png">
+<link rel="apple-touch-icon" href="icone.png">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#eef4ff;background:radial-gradient(120% 90% at 50% 0%,#0d3b80 0%,#062653 55%,#041b3f 100%);display:grid;place-items:center;padding:24px;text-align:center}
+main{width:100%;max-width:420px}
+img{width:min(150px,40vw);height:auto;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:16px}
+.sub{color:#b4c8e6;font-size:14px;margin-top:4px}
+.abre{margin-top:26px;font-size:15px;color:#d4e3f8;display:flex;align-items:center;justify-content:center;gap:10px}
+.abre.erro{color:#ffd6d6}
+.gira{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;animation:g 1s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.abre.erro{color:#ffd6d6}
+.gira{animation:none}}
+a.btn{display:block;margin-top:22px;padding:15px 18px;border-radius:12px;background:#075DB5;color:#fff;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.3)}
+a.btn:focus-visible{outline:3px solid #9fd2ff;outline-offset:3px}
+.dica{margin-top:22px;text-align:left;font-size:13.5px;line-height:1.5;color:#c9d9f1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 14px}
+.dica b{color:#fff}
+details.ajuda{margin-top:20px;text-align:left;font-size:13.5px;line-height:1.5;color:#c9d9f1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:0 14px}
+details.ajuda summary{cursor:pointer;padding:12px 0;font-weight:700;color:#fff;font-size:14.5px;list-style:none}
+details.ajuda summary::-webkit-details-marker{display:none}
+details.ajuda summary::after{content:" ▾";color:#9fd2ff}
+details.ajuda[open] summary::after{content:" ▴"}
+details.ajuda summary:focus-visible{outline:3px solid #9fd2ff;outline-offset:2px;border-radius:6px}
+details.ajuda p{margin:0 0 8px}details.ajuda b{color:#fff}
+details.ajuda .sis{margin:10px 0 2px;font-weight:700;color:#9fd2ff;font-size:12.5px}
+details.ajuda ol{margin:0 0 6px;padding-left:20px}details.ajuda li{margin:2px 0}
+details.ajuda .obs{margin:10px 0 12px;color:#b4c8e6;font-size:12.5px}
+.outro{display:inline-block;margin-top:18px;font-size:13.5px;color:#9fd2ff}
+</style>
+</head>
+<body>
+<main>
+  <img src="brasao.png" alt="Brasão do Grupo Escolar José Francisco Santana">
+  <h1>Portal Escolar JFS</h1>
+  <p class="sub">Grupo Escolar José Francisco Santana<br>Currais – PI</p>
+  <p class="abre" id="abre"><span class="gira" aria-hidden="true"></span><span>Abrindo o portal…</span></p>
+  <a class="btn" id="btn" href="https://script.google.com/macros/s/AKfycbyzNjxxP4im62XN6cA4druKUB3_8PxbYA7oN1JTt95R8Qpj-zVOm-Jv7lBepubgfC4ypA/exec">Entrar no portal</a>
+  <p id="denovo" hidden><a class="outro" href="javascript:location.reload()">Tentar de novo</a></p>
+  <details class="ajuda" id="ajuda">
+    <summary>Não abriu? Veja como resolver</summary>
+    <p>Se aparecer <b>"Não foi possível abrir o arquivo"</b>, o seu aparelho tem mais de uma conta Google conectada e o Google se confundiu. É só abrir numa <b>aba anônima</b>:</p>
+    <p class="sis">Android (Chrome)</p>
+    <ol><li>Toque nos <b>três pontinhos</b> (canto de cima).</li><li>Toque em <b>Nova guia anônima</b>.</li><li>Digite <b>grupoescolarjfs.github.io/portal</b></li></ol>
+    <p class="sis">iPhone (Safari)</p>
+    <ol><li>Toque no botão de <b>abas</b> (dois quadrados, embaixo).</li><li>Toque em <b>Privado</b> e depois em <b>+</b>.</li><li>Digite <b>grupoescolarjfs.github.io/portal</b></li></ol>
+    <p class="sis">Computador</p>
+    <ol><li>Aperte <b>Ctrl+Shift+N</b> (no Mac, Cmd+Shift+N).</li><li>Digite <b>grupoescolarjfs.github.io/portal</b></li></ol>
+    <p class="obs">Outra saída: tirar do aparelho as contas Google que você não usa.</p>
+  </details>
+  <a class="outro" href="./">Grupo Escolar JFS · Portal e Sala Virtual</a>
+</main>
+<script>
+(function(){
+  var EXEC='https://script.google.com/macros/s/AKfycbyzNjxxP4im62XN6cA4druKUB3_8PxbYA7oN1JTt95R8Qpj-zVOm-Jv7lBepubgfC4ypA/exec', abre=document.getElementById('abre');
+  function falhou(msg){
+    abre.innerHTML='<span>'+msg+'</span>';abre.className='abre erro';
+    var a=document.getElementById('ajuda');if(a)a.open=true;
+    var b=document.getElementById('btn');b.textContent='Abrir pelo link do Google';b.href=EXEC;
+    var t=document.getElementById('denovo');if(t)t.hidden=false;
+  }
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(EXEC)){falhou('Endereço ainda não configurado.');return;}
+  if(!window.fetch||!window.Promise){location.href=EXEC;return;}
+  var pronto=false,lim=setTimeout(function(){if(!pronto)falhou('O Google está demorando para responder.');},45000);
+  // Busca o portal SEM cookies: o Google não mistura as contas do aparelho (o erro "/u/7/").
+  fetch(EXEC+'?app=1',{credentials:'omit',cache:'no-store',redirect:'follow'})
+    .then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text();})
+    .then(function(t){
+      if(t.indexOf('<title>Portal Escolar JFS</title>')<0||t.length<50000)throw new Error('conteúdo inesperado');
+      pronto=true;clearTimeout(lim);
+      var head='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'+
+        '<link rel="icon" href="icone.png"><meta name="theme-color" content="#062653"><script>window.PORTAL_EXEC='+JSON.stringify(EXEC)+';window.PORTAL_PORTA=true;<\/script>';
+      document.open();document.write(head+t);document.close();
+    })
+    .catch(function(){if(!pronto){pronto=true;clearTimeout(lim);falhou('Não foi possível carregar o portal agora.');}});
+})();
+</script>
+</body>
+</html>
