@@ -17,36 +17,87 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#062653">
+<meta name="theme-color" content="#14213D">
 <link rel="icon" href="icone.png">
 <link rel="apple-touch-icon" href="icone.png">
 <style>
+html{-webkit-text-size-adjust:100%}
 *{box-sizing:border-box;margin:0}
-html,body{min-height:100%}
-body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#eef4ff;background:radial-gradient(120% 90% at 50% 0%,#0d3b80 0%,#062653 55%,#041b3f 100%);display:grid;place-items:center;padding:28px 20px;text-align:center}
-main{width:100%;max-width:520px}
-img{width:min(160px,42vw);height:auto;filter:drop-shadow(0 10px 24px rgba(0,0,0,.35))}
-h1{font-size:25px;font-weight:800;letter-spacing:-.02em;margin-top:16px;line-height:1.2}
-.sub{color:#b4c8e6;font-size:14px;margin-top:6px}
-.op{display:grid;gap:14px;margin-top:28px}
-.op a{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:18px 20px;border-radius:14px;text-decoration:none;color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16)}
-.op a:hover{background:rgba(255,255,255,.11)}
-.op a:focus-visible{outline:3px solid #9fd2ff;outline-offset:3px}
-.op b{font-size:18px}.op span{font-size:14px;color:#c4d6ef}
-.op a.p{border-left:5px solid #c8962e}.op a.s{border-left:5px solid #168BEB}
-.rod{margin-top:26px;font-size:12.5px;color:#8fadd6}
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;color:#0F1B2D;min-height:100vh;display:flex;background:#fff}
+.lado{flex:0 0 46%;position:relative;overflow:hidden;color:#fff;padding:48px 56px;display:flex;flex-direction:column;
+ background:radial-gradient(120% 80% at 85% 0%,#1F3A6B 0%,rgba(31,58,107,0) 60%),linear-gradient(160deg,#14213D 0%,#0B1428 100%)}
+.lado:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(180deg,#000 0%,transparent 85%)}
+.lado>*{position:relative}
+.marca{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#AFC2E4;font-weight:600}
+.centro{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:430px}
+.bras{width:150px;filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));margin-bottom:34px}
+.centro h2{font-size:38px;line-height:1.12;font-weight:700;letter-spacing:-.025em}
+.centro h2 em{font-style:normal;color:#F2C14E}
+.centro p{margin-top:16px;font-size:15.5px;line-height:1.55;color:#C6D2E6}
+.itens{display:flex;gap:22px;margin-top:30px;font-size:13px;color:#C6D2E6}
+.itens span{display:flex;align-items:center;gap:8px}
+.itens i{width:6px;height:6px;border-radius:50%;background:#F2C14E;display:inline-block}
+.rod{font-size:12.5px;color:#8FA3C4}
+.form{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.box{width:100%;max-width:370px}
+.mtop{display:none}
+h1{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.sub{font-size:14.5px;color:#6B7684;margin-bottom:28px}
+label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
+input{width:100%;height:48px;border:1px solid #D5DAE1;border-radius:10px;padding:0 14px;font:inherit;font-size:15px;color:#0F1B2D;background:#F8FAFC;margin-bottom:16px}
+.row{display:flex;justify-content:space-between;align-items:baseline}
+.row a{font-size:13px;color:#2456A6;text-decoration:none;font-weight:500}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:#4A5563;margin:2px 0 20px;font-weight:400}
+.chk input{width:16px;height:16px;margin:0}
+button{width:100%;height:50px;border:0;border-radius:10px;background:#14213D;color:#fff;font:inherit;font-size:15px;font-weight:600;box-shadow:0 8px 20px -8px rgba(20,33,61,.6)}
+.alt{margin-top:26px;display:grid;gap:10px}
+.alt a{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #E6E9EE;border-radius:10px;text-decoration:none;color:#0F1B2D;font-size:14px;font-weight:500}
+.alt a small{display:block;font-size:12.5px;color:#6B7684;font-weight:400;margin-top:1px}
+.alt a .ic{width:34px;height:34px;border-radius:8px;background:#EEF2F8;display:flex;align-items:center;justify-content:center;flex:none}
+.alt a .ic svg{width:18px;height:18px;stroke:#14213D;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.alt a:after{content:"›";margin-left:auto;color:#9AA3B0;font-size:20px}
+.links{margin-top:18px;font-size:13px;color:#6B7684;text-align:center}
+.links a{color:#2456A6;text-decoration:none;font-weight:500}
+@media (max-width:760px){
+ body{flex-direction:column}
+ .lado{flex:none;padding:28px 24px 64px}
+ .centro{flex-direction:row;align-items:center;gap:16px;margin-top:22px}
+ .bras{width:66px;margin:0}
+ .centro h2{font-size:19px;line-height:1.2}
+ .centro p,.itens,.rod{display:none}
+ .form{padding:0 16px 28px;margin-top:-40px;align-items:flex-start;position:relative;z-index:2}
+ .marca{font-size:11px;letter-spacing:.12em}
+ .centro{justify-content:flex-start}
+ .box{background:#fff;border-radius:16px;padding:24px 20px;box-shadow:0 10px 30px -12px rgba(15,27,45,.25)}
+}
+
+.esc{display:grid;gap:14px}
+.op{display:flex;align-items:center;gap:16px;padding:20px;border:1px solid #E6E9EE;border-radius:14px;text-decoration:none;color:#0F1B2D}
+.op.pri{background:#14213D;color:#fff;border-color:#14213D;box-shadow:0 12px 28px -12px rgba(20,33,61,.7)}
+.op .ic{width:46px;height:46px;border-radius:11px;background:#EEF2F8;display:flex;align-items:center;justify-content:center;flex:none}
+.op.pri .ic{background:rgba(255,255,255,.1)}
+.op .ic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.op b{display:block;font-size:17px;font-weight:600}
+.op small{display:block;font-size:13.5px;color:#6B7684;margin-top:3px;line-height:1.4}
+.op.pri small{color:#C6D2E6}
+.op:hover{border-color:#C9D4E6}.op.pri:hover{background:#1c2d52}
+.op:focus-visible{outline:3px solid #2456A6;outline-offset:3px}
+.op:after{content:"→";margin-left:auto;font-size:18px;color:#9AA3B0}
+.op.pri:after{color:#F2C14E}
+.nota{margin-top:22px;font-size:13px;color:#6B7684;text-align:center}
 </style>
 </head>
 <body>
-<main>
-  <img src="brasao.png" alt="Brasão do Grupo Escolar José Francisco Santana">
-  <h1>Grupo Escolar José Francisco Santana</h1>
-  <p class="sub">Currais – Piauí</p>
-  <nav class="op" aria-label="Sistemas da escola">
-    <a class="p" href="portal.html"><b>Portal Escolar</b><span>Notas, frequência, boletins e avisos. Para famílias, alunos, professores e gestão.</span></a>
-    <a class="s" href="sala.html"><b>Sala Virtual</b><span>Chat da turma e atividades.</span></a>
-  </nav>
-  <p class="rod">Dúvidas: procure a secretaria da escola.</p>
-</main>
-</body>
-</html>
+<aside class="lado"><div class="marca">Currais – Piauí</div>
+<div class="centro"><img class="bras" src="brasao.png" alt="Brasão do Grupo Escolar José Francisco Santana"><div><h2>Grupo Escolar <em>José Francisco Santana</em></h2>
+<p>Acompanhe a vida escolar: notas, frequência, boletins, comunicados e a sala de aula virtual.</p>
+<div class="itens"><span><i></i>Famílias</span><span><i></i>Alunos</span><span><i></i>Professores</span><span><i></i>Gestão</span></div></div></div>
+<div class="rod">Educação hoje, um futuro melhor amanhã.</div></aside>
+<section class="form"><div class="box">
+<h1>Bem-vindo</h1><p class="sub">Escolha por onde quer entrar.</p>
+<nav class="esc" aria-label="Sistemas da escola">
+<a class="op pri" href="portal.html"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M8 9h6M8 13h6"/></svg></span><span><b>Portal Escolar</b><small>Notas, frequência, boletins e avisos</small></span></a>
+<a class="op" href="sala.html"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4z"/></svg></span><span><b>Sala Virtual</b><small>Chat da turma e atividades</small></span></a>
+</nav>
+<p class="nota">Dúvidas? Procure a secretaria da escola.</p>
+</div></section></body></html>
