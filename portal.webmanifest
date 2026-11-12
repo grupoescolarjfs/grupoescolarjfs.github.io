@@ -1,0 +1,33 @@
+{
+ "id": "portal",
+ "name": "Portal Escolar JFS",
+ "short_name": "Portal JFS",
+ "description": "Notas, frequência, boletins e avisos do Grupo Escolar José Francisco Santana.",
+ "lang": "pt-BR",
+ "start_url": "portal.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#062653",
+ "theme_color": "#062653",
+ "icons": [
+  {
+   "src": "icone-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icone-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icone-mask-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

@@ -20,7 +20,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#062653">
 <link rel="icon" href="icone.png">
-<link rel="apple-touch-icon" href="icone.png">
+<link rel="apple-touch-icon" href="icone-180.png">
+<link rel="manifest" href="sala.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sala JFS">
 <style>
 *{box-sizing:border-box;margin:0}
 html,body{height:100%}
@@ -92,7 +96,13 @@ details.ajuda .obs{margin:10px 0 12px;color:#b4c8e6;font-size:12.5px}
       if(t.indexOf('<title>Sala Virtual JFS</title>')<0||t.length<50000)throw new Error('conteúdo inesperado');
       pronto=true;clearTimeout(lim);
       var head='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'+
-        '<link rel="icon" href="icone.png"><meta name="theme-color" content="#062653"><script>window.SALA_EXEC='+JSON.stringify(EXEC)+';window.SALA_PORTA=true;<\/script>';
+        '<link rel="icon" href="icone.png"><meta name="theme-color" content="#062653">'+
+        '<link rel="manifest" href="sala.webmanifest"><link rel="apple-touch-icon" href="icone-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sala JFS">'+
+        '<script>window.SALA_EXEC='+JSON.stringify(EXEC)+';window.SALA_PORTA=true;'+
+        // app na tela inicial: guarda o convite do navegador (Android/computador) e registra o service worker (abre sem internet só a tela de aviso)
+        'window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__instalar=e;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
+        'window.addEventListener("appinstalled",function(){window.__instalar=null;window.__instalado=true;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
+        'if("serviceWorker" in navigator)try{navigator.serviceWorker.register("sw.js").catch(function(){})}catch(x){}<\/script>';
       document.open();document.write(head+t);document.close();
     })
     .catch(function(){if(!pronto){pronto=true;clearTimeout(lim);falhou('Não foi possível carregar a Sala Virtual agora.');}});
