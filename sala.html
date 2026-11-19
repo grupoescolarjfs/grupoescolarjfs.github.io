@@ -89,23 +89,47 @@ details.ajuda .obs{margin:10px 0 12px;color:#b4c8e6;font-size:12.5px}
   if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(EXEC)){falhou('Endereço ainda não configurado.');return;}
   if(!window.fetch||!window.Promise){location.href=EXEC;return;}
   var pronto=false,lim=setTimeout(function(){if(!pronto)falhou('O Google está demorando para responder.');},45000);
-  // Busca o portal SEM cookies: o Google não mistura as contas do aparelho (o erro "/u/7/").
-  fetch(EXEC+'?app=1',{credentials:'omit',cache:'no-store',redirect:'follow'})
+  // v63.29 (Antônio, 19/11/2026): abre mais rápido. O código do portal fica guardado neste aparelho (Cache do navegador);
+  // na próxima vez abre na hora com a cópia guardada e, em segundo plano, confere se há versão nova no Google.
+  // Só guarda o CÓDIGO da página (o mesmo para todo mundo). Dados da escola, notas e sessões NÃO vão para essa cópia.
+  var REQ=EXEC+'?app=1',CK='sala-app-v1',temCache=false;try{temCache=!!(window.caches&&caches.open&&window.isSecureContext);}catch(e){}
+  function valido(t){return !!t&&t.indexOf('<title>Sala Virtual JFS</title>')>=0&&t.length>=50000;}
+  function hash(t){var h=0,i=0,n=t.length;for(;i<n;i++)h=(h*31+t.charCodeAt(i))|0;return h+'_'+n;}
+  function guardar(t){if(!temCache)return;try{caches.open(CK).then(function(c){return c.put(REQ,new Response(t,{headers:{'Content-Type':'text/plain;charset=utf-8'}}));}).catch(function(){});}catch(e){}}
+  function buscar(){return fetch(REQ,{credentials:'omit',cache:'no-store',redirect:'follow'})
     .then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text();})
-    .then(function(t){
-      if(t.indexOf('<title>Sala Virtual JFS</title>')<0||t.length<50000)throw new Error('conteúdo inesperado');
-      pronto=true;clearTimeout(lim);
-      var head='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'+
-        '<link rel="icon" href="icone.png"><meta name="theme-color" content="#062653">'+
-        '<link rel="manifest" href="sala.webmanifest"><link rel="apple-touch-icon" href="icone-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sala JFS">'+
-        '<script>window.SALA_EXEC='+JSON.stringify(EXEC)+';window.SALA_PORTA=true;'+
-        // app na tela inicial: guarda o convite do navegador (Android/computador) e registra o service worker (abre sem internet só a tela de aviso)
-        'window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__instalar=e;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
-        'window.addEventListener("appinstalled",function(){window.__instalar=null;window.__instalado=true;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
-        'if("serviceWorker" in navigator)try{navigator.serviceWorker.register("sw.js").catch(function(){})}catch(x){}<\/script>';
-      document.open();document.write(head+t);document.close();
-    })
-    .catch(function(){if(!pronto){pronto=true;clearTimeout(lim);falhou('Não foi possível carregar a Sala Virtual agora.');}});
+    .then(function(t){if(!valido(t))throw new Error('conteúdo inesperado');guardar(t);return t;});}
+  // roda DENTRO do portal já aberto pela cópia guardada: busca a versão do Google e, se mudou, guarda e oferece "Atualizar"
+  function conferirVersao(REQ,CK,h0,TIT){
+    function hash(t){var h=0,i=0,n=t.length;for(;i<n;i++)h=(h*31+t.charCodeAt(i))|0;return h+'_'+n;}
+    function aviso(){if(document.getElementById('appNova'))return;var d=document.createElement('div');d.id='appNova';d.setAttribute('role','status');
+      d.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;background:#062653;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.25);font:14px/1.35 system-ui,sans-serif;display:flex;gap:12px;align-items:center;max-width:92vw';
+      d.innerHTML='<span>Há uma versão nova d'+TIT+'.</span>';var b=document.createElement('button');b.textContent='Atualizar';b.style.cssText='background:#c8962e;color:#fff;border:0;border-radius:8px;padding:6px 12px;font:inherit;font-weight:700;cursor:pointer';
+      b.onclick=function(){location.reload();};d.appendChild(b);(document.body||document.documentElement).appendChild(d);}
+    function vai(){fetch(REQ,{credentials:'omit',cache:'no-store',redirect:'follow'}).then(function(r){return r.ok?r.text():'';}).then(function(t){
+      if(!t||t.length<50000||t.indexOf('<title>')<0||hash(t)===h0)return;
+      caches.open(CK).then(function(c){return c.put(REQ,new Response(t,{headers:{'Content-Type':'text/plain;charset=utf-8'}}));}).then(aviso).catch(function(){});}).catch(function(){});}
+    if(document.readyState==='complete')setTimeout(vai,4000);else window.addEventListener('load',function(){setTimeout(vai,4000);});
+  }
+  function abrir(t,daCopia){
+    if(pronto)return;pronto=true;clearTimeout(lim);
+    var head='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'+
+      '<link rel="icon" href="icone.png"><meta name="theme-color" content="#062653">'+
+      '<link rel="manifest" href="sala.webmanifest"><link rel="apple-touch-icon" href="icone-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sala JFS">'+
+      '<script>window.SALA_EXEC='+JSON.stringify(EXEC)+';window.SALA_PORTA=true;'+
+      // app na tela inicial: guarda o convite do navegador (Android/computador) e registra o service worker (abre sem internet só a tela de aviso)
+      'window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__instalar=e;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
+      'window.addEventListener("appinstalled",function(){window.__instalar=null;window.__instalado=true;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
+      'if("serviceWorker" in navigator)try{navigator.serviceWorker.register("sw.js").catch(function(){})}catch(x){}'+
+      (daCopia?'try{('+String(conferirVersao)+')('+JSON.stringify(REQ)+','+JSON.stringify(CK)+','+JSON.stringify(hash(t))+','+JSON.stringify('a Sala Virtual')+');}catch(x){}':'')+
+      '<\/script>';
+    document.open();document.write(head+t);document.close();
+  }
+  function semCopia(){buscar().then(function(t){abrir(t,false);}).catch(function(){if(!pronto){pronto=true;clearTimeout(lim);falhou('Não foi possível carregar a Sala Virtual agora.');}});}
+  if(!temCache){semCopia();return;}
+  // Busca o portal SEM cookies: o Google não mistura as contas do aparelho (o erro "/u/7/").
+  caches.open(CK).then(function(c){return c.match(REQ);}).then(function(r){return r?r.text():'';}).catch(function(){return '';})
+    .then(function(t){if(valido(t))abrir(t,true);else semCopia();});
 })();
 </script>
 </body>
