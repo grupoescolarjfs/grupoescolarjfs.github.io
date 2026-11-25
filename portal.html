@@ -118,8 +118,21 @@ details.ajuda .obs{margin:10px 0 12px;color:#b4c8e6;font-size:12.5px}
       else if(v0&&!v1)return;                  // a guardada tem número e a do Google não: é mais velha
       else if(h1===h0)return;                  // sem número (versões antigas): compara o texto
       var k=v1||h1;
-      caches.open(CK).then(function(c){return c.put(REQ,new Response(t,{headers:{'Content-Type':'text/plain;charset=utf-8'}}));}).then(function(){aviso(k,!v1);}).catch(function(){});}).catch(function(){});}
-    if(document.readyState==='complete')setTimeout(vai,4000);else window.addEventListener('load',function(){setTimeout(vai,4000);});
+      caches.open(CK).then(function(c){return c.put(REQ,new Response(t,{headers:{'Content-Type':'text/plain;charset=utf-8'}}));}).then(function(){if(typeof window.PORTAL_PODE_RECARREGAR==='function')sozinho(v1||k);else aviso(k,!v1);}).catch(function(){});}).catch(function(){});}
+    // v63.56 (Antônio, 25/11/2026): o Portal atualiza SOZINHO. Quando chega versão nova, recarrega assim que for seguro
+    // (o Portal diz pelo PORTAL_PODE_RECARREGAR: sem notas por salvar, ninguém digitando, ditado desligado).
+    // Se não for seguro agora, tenta de novo a cada 10 s e quando a pessoa sai da tela. Depois o Portal mostra as novidades.
+    // A Sala Virtual não tem essa função e continua com o aviso "Atualizar".
+    var esperando=false;
+    function sozinho(v){if(esperando)return;esperando=true;
+      function tenta(){var ok=false;try{ok=!!window.PORTAL_PODE_RECARREGAR();}catch(e){}if(!ok)return false;
+        try{localStorage.setItem('portalAtualizadoPara',String(v));}catch(e){}location.reload();return true;}
+      if(tenta())return;var iv=setInterval(function(){if(tenta())clearInterval(iv);},10000);
+      document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')tenta();});}
+    var ultima=0;function confere(){if(esperando)return;ultima=Date.now();vai();}
+    if(document.readyState==='complete')setTimeout(confere,4000);else window.addEventListener('load',function(){setTimeout(confere,4000);});
+    setInterval(confere,20*60*1000);   // com o Portal aberto o dia todo, confere de 20 em 20 minutos
+    document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&Date.now()-ultima>5*60*1000)confere();});
   }
   function verDe(t){var m=new RegExp('<'+'!--portal-versao:v(\\d+)\\.(\\d+)(?:\\.(\\d+))?--'+'>').exec((t||'').slice(0,400));return m?(+m[1])*1e6+(+m[2])*1e3+(+(m[3]||0)):0;}
   function abrir(t,daCopia){
