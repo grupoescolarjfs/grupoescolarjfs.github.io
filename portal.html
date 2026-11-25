@@ -99,18 +99,29 @@ details.ajuda .obs{margin:10px 0 12px;color:#b4c8e6;font-size:12.5px}
   function buscar(){return fetch(REQ,{credentials:'omit',cache:'no-store',redirect:'follow'})
     .then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text();})
     .then(function(t){if(!valido(t))throw new Error('conteúdo inesperado');guardar(t);return t;});}
-  // roda DENTRO do portal já aberto pela cópia guardada: busca a versão do Google e, se mudou, guarda e oferece "Atualizar"
-  function conferirVersao(REQ,CK,h0,TIT){
+  // roda DENTRO do portal já aberto pela cópia guardada: busca a versão do Google e, se for MAIS NOVA, guarda e oferece "Atualizar".
+  // v63.47 (Antônio, 24/11/2026): o aviso voltava depois de recarregar. Agora compara o número da versão ((marca portal-versao no topo do Index)),
+  // só avisa quando a do Google é mais nova (nunca volta para uma mais velha se algum servidor do Google ainda tiver a anterior)
+  // (Index antigo, sem número: cada texto novo é avisado uma vez só neste aparelho.)
+  function conferirVersao(REQ,CK,h0,v0,TIT){
     function hash(t){var h=0,i=0,n=t.length;for(;i<n;i++)h=(h*31+t.charCodeAt(i))|0;return h+'_'+n;}
-    function aviso(){if(document.getElementById('appNova'))return;var d=document.createElement('div');d.id='appNova';d.setAttribute('role','status');
+    function ver(t){var m=new RegExp('<'+'!--portal-versao:v(\\d+)\\.(\\d+)(?:\\.(\\d+))?--'+'>').exec(t.slice(0,400));return m?(+m[1])*1e6+(+m[2])*1e3+(+(m[3]||0)):0;}
+    var LK='appNovaAvisada:'+CK;function ja(k){try{return localStorage.getItem(LK)===String(k);}catch(e){return false;}}function marca(k){try{localStorage.setItem(LK,String(k));}catch(e){}}
+    function aviso(k,porHash){if(document.getElementById('appNova')||(porHash&&ja(k)))return;if(porHash)marca(k);var d=document.createElement('div');d.id='appNova';d.setAttribute('role','status');
       d.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;background:#062653;color:#fff;padding:10px 14px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.25);font:14px/1.35 system-ui,sans-serif;display:flex;gap:12px;align-items:center;max-width:92vw';
       d.innerHTML='<span>Há uma versão nova d'+TIT+'.</span>';var b=document.createElement('button');b.textContent='Atualizar';b.style.cssText='background:#c8962e;color:#fff;border:0;border-radius:8px;padding:6px 12px;font:inherit;font-weight:700;cursor:pointer';
-      b.onclick=function(){location.reload();};d.appendChild(b);(document.body||document.documentElement).appendChild(d);}
+      b.onclick=function(){location.reload();};var x=document.createElement('button');x.textContent='✕';x.setAttribute('aria-label','Fechar');x.style.cssText='background:transparent;color:#cfe0f7;border:0;font:inherit;font-size:16px;cursor:pointer;padding:2px 4px';
+      x.onclick=function(){d.remove();};d.appendChild(b);d.appendChild(x);(document.body||document.documentElement).appendChild(d);}
     function vai(){fetch(REQ,{credentials:'omit',cache:'no-store',redirect:'follow'}).then(function(r){return r.ok?r.text():'';}).then(function(t){
-      if(!t||t.length<50000||t.indexOf('<title>')<0||hash(t)===h0)return;
-      caches.open(CK).then(function(c){return c.put(REQ,new Response(t,{headers:{'Content-Type':'text/plain;charset=utf-8'}}));}).then(aviso).catch(function(){});}).catch(function(){});}
+      if(!t||t.length<50000||t.indexOf('<title>')<0)return;var v1=ver(t),h1=hash(t);
+      if(v1&&v0){if(v1<=v0)return;}            // com número: só se for mais nova
+      else if(v0&&!v1)return;                  // a guardada tem número e a do Google não: é mais velha
+      else if(h1===h0)return;                  // sem número (versões antigas): compara o texto
+      var k=v1||h1;
+      caches.open(CK).then(function(c){return c.put(REQ,new Response(t,{headers:{'Content-Type':'text/plain;charset=utf-8'}}));}).then(function(){aviso(k,!v1);}).catch(function(){});}).catch(function(){});}
     if(document.readyState==='complete')setTimeout(vai,4000);else window.addEventListener('load',function(){setTimeout(vai,4000);});
   }
+  function verDe(t){var m=new RegExp('<'+'!--portal-versao:v(\\d+)\\.(\\d+)(?:\\.(\\d+))?--'+'>').exec((t||'').slice(0,400));return m?(+m[1])*1e6+(+m[2])*1e3+(+(m[3]||0)):0;}
   function abrir(t,daCopia){
     if(pronto)return;pronto=true;clearTimeout(lim);
     var head='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'+
@@ -121,7 +132,7 @@ details.ajuda .obs{margin:10px 0 12px;color:#b4c8e6;font-size:12.5px}
       'window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__instalar=e;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
       'window.addEventListener("appinstalled",function(){window.__instalar=null;window.__instalado=true;try{window.dispatchEvent(new Event("instalar-pronto"))}catch(x){}});'+
       'if("serviceWorker" in navigator)try{navigator.serviceWorker.register("sw.js").catch(function(){})}catch(x){}'+
-      (daCopia?'try{('+String(conferirVersao)+')('+JSON.stringify(REQ)+','+JSON.stringify(CK)+','+JSON.stringify(hash(t))+','+JSON.stringify('o portal')+');}catch(x){}':'')+
+      (daCopia?'try{('+String(conferirVersao)+')('+JSON.stringify(REQ)+','+JSON.stringify(CK)+','+JSON.stringify(hash(t))+','+verDe(t)+','+JSON.stringify('o portal')+');}catch(x){}':'')+
       '<\/script>';
     document.open();document.write(head+t);document.close();
   }
